@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <!-- 确保网页在移动设备上也能正常显示 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的职业规划作品集 - [请替换成你的名字]</title>
+    <!-- 1. 已更新你的名字 -->
+    <title>我的职业规划作品集 - 张功博</title>
     <!-- 引入Tailwind CSS，这是目前最流行的CSS框架之一 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 使用Inter字体，让页面看起来更现代 -->
@@ -24,23 +25,106 @@
         /* 跟随鼠标的光球特效 - 优化版 */
         #mouse-orb {
             position: fixed;
-            /* z-index为40，低于导航栏(z-50)，高于页面内容 */
             z-index: 40; 
-            /* 尺寸改小 */
             width: 250px;
             height: 250px;
-            /* 初始位置在屏幕外 */
             top: -500px; 
             left: -500px;
-            /* 径向渐变 - 亮度提高 */
             background: radial-gradient(circle, rgba(99, 102, 241, 0.2), transparent 70%);
             border-radius: 50%;
-            pointer-events: none; /* 关键：让鼠标可以“穿透”光球，点击它下面的内容 */
-            transform: translate(-50%, -50%); /* 确保光球中心对准鼠标指针 */
-            /* 跟随速度加快 */
+            pointer-events: none; 
+            transform: translate(-50%, -50%);
             transition: top 0.05s ease-out, left 0.05s ease-out; 
-            /* 模糊度降低，让光晕更集中 */
             filter: blur(30px); 
+        }
+
+        /* 4. "联系我" 弹窗 (Modal) 样式 */
+        .modal-overlay {
+            /* 黑色半透明背景 */
+            background-color: rgba(0, 0, 0, 0.75);
+            /* 确保它在最顶层 (z-50 在导航栏上，所以用 60) */
+            z-index: 60;
+            /* 平滑过渡效果 */
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            /* 平滑的弹出动画 */
+            transition: transform 0.3s ease;
+        }
+
+        /* 3. "动态技能条" 样式 */
+        .skill-bar-inner {
+            /* 技能条的过渡动画 */
+            transition: width 1.5s ease-out;
+            /* 漂亮的渐变色 */
+            background: linear-gradient(90deg, rgba(99,102,241,1) 0%, rgba(165,180,252,1) 100%);
+            width: 0%; /* 默认宽度为0，由JS来驱动 */
+        }
+
+        /* 5. 井字棋游戏样式 */
+        .tic-tac-toe-board {
+            display: grid;
+            /* 3x3 网格 */
+            grid-template-columns: repeat(3, 1fr);
+            width: 240px; /* 3 * 80px */
+            height: 240px; /* 3 * 80px */
+            margin: 20px auto; /* 居中 */
+            border: 2px solid #4f46e5; /* 边框颜色 - 适配主题 */
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .cell {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem; /* 'X' 'O' 字体大一点 */
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid #3730a3; /* 内部单元格边框 - 适配主题 */
+            transition: background-color 0.2s;
+            user-select: none; /* 防止鼠标选中 'X' 和 'O' */
+            /* 优化边框显示，避免双重边框 */
+            border-top: none;
+            border-left: none;
+        }
+        /* 单独设置上边框 */
+        .cell[data-index="3"], .cell[data-index="6"] { border-top: 2px solid #4f46e5; }
+        /* 单独设置左边框 */
+        .cell[data-index="1"], .cell[data-index="4"], .cell[data-index="7"] { border-left: 2px solid #4f46e5; }
+        .cell[data-index="2"], .cell[data-index="5"], .cell[data-index="8"] { border-left: 2px solid #4f46e5; }
+        
+
+        .cell:hover {
+            background-color: #3730a3; /* 悬停颜色 - 适配主题 */
+        }
+        /* 'X' 和 'O' 的颜色 */
+        .cell.x {
+            color: #a5b4fc; /* 'X' 颜色 - 适配主题 */
+        }
+        .cell.o {
+            color: #fca5a5; /* 'O' 颜色 - 适配主题 */
+        }
+        #game-status {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-top: 1rem;
+            color: #c7d2fe; /* 状态文字颜色 */
+            height: 2rem; /* 固定高度防止重置时页面跳动 */
+        }
+        .reset-btn {
+            background-color: #ef4444; /* 红色按钮 */
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+        .reset-btn:hover {
+            background-color: #dc2626;
         }
     </style>
 </head>
@@ -51,11 +135,10 @@
     <div id="mouse-orb"></div>
 
     <!-- 1. 导航栏 -->
-    <!-- 导航栏背景和文字颜色适配暗色模式 -->
     <header class="bg-slate-800 shadow-lg sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- 左上角的名字或Logo - 颜色调亮 -->
-            <div class="text-2xl font-bold text-indigo-400">[你的名字]</div>
+            <!-- 1. 已更新你的名字 -->
+            <div class="text-2xl font-bold text-indigo-400">张功博</div>
             <!-- 导航链接 - 颜色调亮 -->
             <div class="space-x-6 hidden md:block">
                 <a href="#about" class="text-slate-300 hover:text-indigo-400 transition duration-300">关于我</a>
@@ -78,14 +161,19 @@
 
         <!-- "关于我" (Hero区域) -->
         <section id="about" class="text-center py-20">
-            <!-- 你可以放一张你的专业照片或头像 -->
-            <img src="https://placehold.co/128x128/E0E7FF/4F46E5?text=头像" alt="你的头像" class="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-slate-700 shadow-lg">
+            <!-- 1. 已更新你的头像占位符 -->
+            <img src="https://placehold.co/128x128/E0E7FF/4F46E5?text=张功博" alt="你的头像" class="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-slate-700 shadow-lg">
             
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">你好，我是 [你的名字]</h1>
+            <!-- 1. 已更新你的名字 -->
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">你好，我是 张功博</h1>
             <p class="text-xl md:text-2xl text-indigo-400 font-medium mb-8">
                 目标职业：前端开发工程师
             </p>
             <p class="max-w-3xl mx-auto text-lg text-slate-300 leading-relaxed">
+                <!-- 
+                    提示：这里可以更新一下你的专业。
+                    比如 "我是一名 [统计学] 研究生..." 
+                -->
                 欢迎来到我的职业规划作品集。我是一名 [你的专业] 研究生，正致力于成为一名优秀的前端开发工程师。
                 我相信技术能创造价值，而我正走在这条创造之路上。
             </p>
@@ -166,11 +254,10 @@
         </section>
 
         <!-- "我的项目" -->
-        <!-- 布局调整：移除卡片样式，改为通栏背景色块，调整背景色为 indigo-800 -->
         <section id="projects" class="py-20 bg-indigo-800 text-white">
             <div class="px-6 md:px-12 container mx-auto">
                 <h2 class="text-3xl font-bold text-center mb-12">我的项目</h2>
-                <!-- 内部卡片适配暗色模式 -->
+                <!-- 项目一 -->
                 <div class="bg-slate-800 text-slate-200 rounded-lg shadow-lg p-8 max-w-3xl mx-auto">
                     <!-- 项目占位图 -->
                     <img src="https://placehold.co/600x300/E0E7FF/4F46E5?text=我的第一个网页项目" alt="项目截图" class="w-full h-auto rounded-md mb-6">
@@ -191,38 +278,80 @@
                     </a>
                     -->
                 </div>
+                
                 <!-- 
-                <p class="text-center text-indigo-100 mt-12">
--->
-                <!-- 
-                <p class="text-center text-indigo-100 mt-12">
-                    （未来你会有更多项目填充到这里）
-                </p>
+                    2. 移除 Gemini API 功能。
+                    3. 添加 "动态技能条" 作为新奇的“项目二”。
                 -->
-
-                <!-- ✨ GEMINI API 功能区 -->
                 <div class="bg-slate-800 text-slate-200 rounded-lg shadow-lg p-8 max-w-3xl mx-auto mt-12">
-                    <h3 class="text-2xl font-semibold text-indigo-400 mb-3">项目二：✨ AI 驱动的项目点子生成器</h3>
+                    <h3 class="text-2xl font-semibold text-indigo-400 mb-3">项目二：动态技能条 (JavaScript 交互)</h3>
                     <p class="text-slate-300 leading-relaxed mb-6">
-                        作为一名前端开发者，持续创造是关键。我内置了这个小工具来展示我集成 API 和使用 AI 的能力。
-                        它调用 Gemini API 来帮助构思下一个练习项目。
+                        作为“统计学”背景的学生，我深知数据可视化的魅力。
+                        我使用 JavaScript 制作了这些动态技能条，将我的学习进度“可视化”，用互动的方式展示我的技术栈。
+                        （这个项目替代了 AI 功能，展示了你的 JS 动手能力）
                     </p>
                     
-                    <!-- 输入区 -->
-                    <div class="mb-4">
-                        <label for="topic-input" class="block text-sm font-medium text-slate-300 mb-2">输入一个你感兴趣的主题（例如：音乐、旅行、健身）：</label>
-                        <input type="text" id="topic-input" class="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="例如：音乐">
+                    <!-- 技能条容器 -->
+                    <div class="space-y-4">
+                        <!-- 技能条1: HTML -->
+                        <div>
+                            <span class="text-slate-300 font-medium">HTML5</span>
+                            <div class="w-full bg-slate-700 rounded-full h-4 mt-1">
+                                <!-- data-level 定义了你的熟练度 (百分比) -->
+                                <div class="skill-bar-inner h-4 rounded-full" data-level="80"></div>
+                            </div>
+                        </div>
+                        <!-- 技能条2: CSS (Tailwind) -->
+                        <div>
+                            <span class="text-slate-300 font-medium">CSS3 (Tailwind)</span>
+                            <div class="w-full bg-slate-700 rounded-full h-4 mt-1">
+                                <div class="skill-bar-inner h-4 rounded-full" data-level="70"></div>
+                            </div>
+                        </div>
+                        <!-- 技能条3: JavaScript -->
+                        <div>
+                            <span class="text-slate-300 font-medium">JavaScript</span>
+                            <div class="w-full bg-slate-700 rounded-full h-4 mt-1">
+                                <div class="skill-bar-inner h-4 rounded-full" data-level="30"></div>
+                            </div>
+                        </div>
+                         <!-- 技能条4: React -->
+                        <div>
+                            <span class="text-slate-300 font-medium">React</span>
+                            <div class="w-full bg-slate-700 rounded-full h-4 mt-1">
+                                <div class="skill-bar-inner h-4 rounded-full" data-level="10"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. 添加 "井字棋游戏" 作为新奇的“项目三” -->
+                <div class="bg-slate-800 text-slate-200 rounded-lg shadow-lg p-8 max-w-3xl mx-auto mt-12 text-center">
+                    <h3 class="text-2xl font-semibold text-indigo-400 mb-3">项目三：交互式井字棋 (JavaScript 游戏)</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6">
+                        为了展示我的 JavaScript 逻辑能力，我在这里实现了一个经典的“井字棋”游戏。
+                        这证明了我可以将算法和事件处理结合，创造一个完整的交互式应用。
+                        （欢迎你来玩一局！）
+                    </p>
+                    
+                    <!-- 游戏状态显示 -->
+                    <div id="game-status">轮到 'X' 了</div>
+                    
+                    <!-- 游戏棋盘 -->
+                    <div class="tic-tac-toe-board">
+                        <div class="cell" data-index="0"></div>
+                        <div class="cell" data-index="1"></div>
+                        <div class="cell" data-index="2"></div>
+                        <div class="cell" data-index="3"></div>
+                        <div class="cell" data-index="4"></div>
+                        <div class="cell" data-index="5"></div>
+                        <div class="cell" data-index="6"></div>
+                        <div class="cell" data-index="7"></div>
+                        <div class="cell" data-index="8"></div>
                     </div>
                     
-                    <!-- 按钮 -->
-                    <button id="generate-btn" onclick="handleGenerate()" class="inline-block bg-indigo-600 text-white text-lg font-medium px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 transform hover:-translate-y-0.5 disabled:bg-slate-500 disabled:cursor-not-allowed">
-                        ✨ 生成项目点子
-                    </button>
-                    
-                    <!-- 结果区 -->
-                    <div id="results-container" class="mt-6">
-                        <!-- AI 生成的内容将显示在这里 -->
-                    </div>
+                    <!-- 重置按钮 -->
+                    <button id="reset-btn" class="reset-btn">重新开始</button>
                 </div>
 
             </div>
@@ -234,170 +363,248 @@
             <p class="max-w-2xl mx-auto text-lg text-slate-300 leading-relaxed mb-8">
                 感谢您的访问。如果您对我的规划感兴趣，或有任何建议，欢迎与我联系。
             </p>
-            <a href="mailto:[你的邮箱地址]" class="inline-block bg-indigo-600 text-white text-lg font-medium px-8 py-3 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 transform hover:-translate-y-0.5">
-                发送邮件
-            </a>
-            <!-- 你还可以添加你的GitHub或LinkedIn -->
-            <!-- 
-            <div class="flex justify-center space-x-6 mt-8">
-                <a href="#" class="text-slate-400 hover:text-indigo-400">LinkedIn</a>
-                <a href="#" class="text-slate-400 hover:text-indigo-400">GitHub</a>
+            
+            <!-- 4. 更新联系方式 (按钮组) -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <!-- 邮件按钮 -->
+                <!-- 
+                    你需要把 [你的邮箱地址] 替换成你的真实邮箱
+                    例如: href="mailto:zhanggongbo@example.com"
+                -->
+                <a href="mailto:[你的邮箱地址]" class="inline-block bg-indigo-600 text-white text-lg font-medium px-8 py-3 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 transform hover:-translate-y-0.5 w-full sm:w-auto">
+                    发送邮件
+                </a>
+                
+                <!-- QQ 按钮 -->
+                <button onclick="openModal('qq')" class="inline-block bg-sky-500 text-white text-lg font-medium px-8 py-3 rounded-lg shadow-md hover:bg-sky-600 transition duration-300 transform hover:-translate-y-0.5 w-full sm:w-auto">
+                    QQ 联系
+                </button>
+                
+                <!-- 微信 按钮 -->
+                <button onclick="openModal('wechat')" class="inline-block bg-green-500 text-white text-lg font-medium px-8 py-3 rounded-lg shadow-md hover:bg-green-600 transition duration-300 transform hover:-translate-y-0.5 w-full sm:w-auto">
+                    微信联系
+                </button>
             </div>
-            -->
+            
         </section>
 
     </main>
 
     <!-- 3. 页脚 -->
-    <!-- 页脚颜色调暗，与 body 形成对比 -->
     <footer class="bg-slate-950 text-slate-400 py-8">
         <div class="container mx-auto px-6 text-center">
-            <p>&copy; 2025 [你的名字]. 为第三届全国大学生职业规划大赛而设计。</p>
+            <!-- 1. 已更新你的名字 -->
+            <p>&copy; 2025 张功博. 为第三届全国大学生职业规划大赛而设计。</p>
         </div>
     </footer>
+
+    <!-- 4. "联系我" 弹窗 (Modal) HTML 结构 -->
+    <!-- 默认隐藏 (hidden) -->
+    <div id="contact-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden">
+        <!-- 黑色半透明背景 -->
+        <div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
+        
+        <!-- 弹窗内容 -->
+        <div class="modal-content bg-slate-800 rounded-lg shadow-2xl w-full max-w-sm mx-auto z-10 transform scale-95">
+            <!-- 弹窗头部 -->
+            <div class="flex justify-between items-center p-4 border-b border-slate-700">
+                <h3 id="modal-title" class="text-xl font-semibold text-white">联系方式</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white">&times;</button>
+            </div>
+            <!-- 弹窗主体 (内容会由JS动态插入) -->
+            <div id="modal-body" class="p-6 text-center">
+                <!-- JS 会在这里插入内容 -->
+            </div>
+        </div>
+    </div>
+
 
     <!-- 光球特效的JavaScript -->
     <script>
         document.addEventListener('mousemove', function(e) {
             const orb = document.getElementById('mouse-orb');
             if (orb) {
-                // e.clientX 和 e.clientY 是鼠标相对于浏览器窗口的位置
-                // 这与 'position: fixed' 完美配合
                 orb.style.left = e.clientX + 'px';
                 orb.style.top = e.clientY + 'px';
             }
         });
 
-        // --- ✨ Gemini API 功能 ---
+        // --- 2. 移除所有 Gemini API 相关的 JS ---
+
+        // --- 3. "动态技能条" 激活 JS ---
+        // 页面加载完成后，触发动画
+        window.addEventListener('load', () => {
+            // 延迟 500ms 执行，让动画更明显
+            setTimeout(() => {
+                const skillBars = document.querySelectorAll('.skill-bar-inner');
+                skillBars.forEach(bar => {
+                    const level = bar.getAttribute('data-level');
+                    bar.style.width = level + '%';
+                });
+            }, 500);
+        });
+
+        // --- 4. "联系我" 弹窗 (Modal) JS ---
+        
+        const modal = document.getElementById('contact-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        
+        /**
+         * 打开弹窗
+         * @param {'qq' | 'wechat'} type - 弹窗类型
+         */
+        function openModal(type) {
+            if (!modal) return;
+
+            if (type === 'qq') {
+                modalTitle.innerText = 'QQ 联系';
+                modalBody.innerHTML = `
+                    <p class="text-slate-300 mb-4">请添加我的 QQ 号码：</p>
+                    <!-- 
+                        你需要把 [你的QQ号] 替换成你的真实QQ号 
+                    -->
+                    <p class="text-2xl font-bold text-white select-all">1146187284</p>
+                    <p class="text-sm text-slate-400 mt-4">（为保护隐私，建议你复制后关闭弹窗）</p>
+                `;
+            } 
+            else if (type === 'wechat') {
+                modalTitle.innerText = '微信联系';
+                modalBody.innerHTML = `
+                    <p class="text-slate-300 mb-4">请使用微信扫一扫加我好友：</p>
+                    <!-- 
+                        **如何使用你的二维码图片：**
+                        1.  把你的二维码图片（比如命名为 `wechat_qr.png`）
+                        2.  上传到你的 GitHub 仓库 (https://github.com/Bo-Ayr/Bo-Ayr.github.io)
+                            (使用和你上传 index.html 时相同的 "Add file" -> "Upload files" 方法)
+                        3.  上传成功后，把下面的 'src' 属性替换为你的图片链接。
+                        
+                        **示例链接：** 'https://Bo-Ayr.github.io/wechat_qr.png'
+                    -->
+                    <img src="https://placehold.co/200x200/ffffff/000000?text=wechatqr" alt="微信二维码" class="w-48 h-48 mx-auto rounded-md border-4 border-slate-700">
+                `;
+            }
+
+            // 显示弹窗和动画
+            modal.classList.remove('hidden');
+            // 强制浏览器重绘，确保动画生效
+            void modal.offsetWidth; 
+            modal.querySelector('.modal-overlay').classList.add('opacity-100');
+            modal.querySelector('.modal-content').classList.add('scale-100');
+        }
 
         /**
-         * 处理生成按钮点击事件
+         * 关闭弹窗
          */
-        async function handleGenerate() {
-            const btn = document.getElementById('generate-btn');
-            const input = document.getElementById('topic-input');
-            const resultsContainer = document.getElementById('results-container');
+        function closeModal() {
+            if (!modal) return;
             
-            const userTopic = input.value.trim();
+            modal.querySelector('.modal-overlay').classList.remove('opacity-100');
+            modal.querySelector('.modal-content').classList.remove('scale-100');
             
-            if (!userTopic) {
-                resultsContainer.innerHTML = '<p class="text-red-400">请输入一个主题！</p>';
+            // 等待动画结束后再隐藏
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // 300ms 对应 CSS 中的 transition duration
+        }
+
+        // --- 5. "井字棋" 游戏 JS 逻辑 ---
+        
+        // 确保 DOM 加载完毕后再获取元素
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameStatus = document.getElementById('game-status');
+            const board = document.querySelector('.tic-tac-toe-board');
+            const cells = document.querySelectorAll('.cell');
+            const resetButton = document.getElementById('reset-btn');
+
+            // 检查元素是否存在
+            if (!gameStatus || !board || !cells.length || !resetButton) {
+                console.error("井字棋游戏元素未找到!");
                 return;
             }
-
-            // 禁用按钮并显示加载动画
-            btn.disabled = true;
-            resultsContainer.innerHTML = `
-                <div class="flex justify-center items-center py-4">
-                    <div class="w-6 h-6 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
-                    <p class="ml-3 text-slate-300">✨ AI 正在思考中，请稍候...</p>
-                </div>
-            `;
-
-            try {
-                // 定义系统提示，指导 AI 的角色和任务
-                const systemPrompt = `
-你是一位资深的前端开发导师。一名初级开发者（目标是成为前端工程师）向你寻求帮助。
-他们想围绕一个特定主题构建一个练习项目，以提高他们的 HTML, CSS, JavaScript 和 React 技能。
-
-你的任务是：
-1.  根据用户提供的主题，生成 3 个独特的项目点子。
-2.  每个点子都必须包含以下内容：
-    * **项目名称**: 一个简洁且有创意的标题。
-    * **项目描述**: 一两句话描述这个项目是做什么的。
-    * **核心功能**: 3-4 个关键功能的点。
-    * **进阶挑战**: 1 个可以锻炼更高级技能的“挑战”功能。
-3.  使用 Markdown 格式化你的回答，使用加粗和列表。
-4.  直接开始回答，不要有额外的寒暄。
-                `;
-
-                // 调用 API
-                const responseText = await callGeminiApi(systemPrompt, `主题：${userTopic}`);
-                
-                // 清理加载动画
-                resultsContainer.innerHTML = '';
-
-                // 创建 <pre> 标签来保留 AI 返回的格式
-                const outputPre = document.createElement('pre');
-                outputPre.textContent = responseText; // 使用 textContent 来安全地插入文本
-                // 添加 Tailwind 类来美化和自动换行
-                outputPre.className = 'bg-slate-900 p-4 rounded-md border border-slate-700 whitespace-pre-wrap font-mono text-sm text-slate-200';
-                
-                resultsContainer.appendChild(outputPre);
-
-            } catch (error) {
-                console.error('Gemini API call failed:', error);
-                resultsContainer.innerHTML = `<p class="text-red-400">抱歉，调用 AI 时出错：${error.message}</p>`;
-            } finally {
-                // 无论成功还是失败，都重新启用按钮
-                btn.disabled = false;
-            }
-        }
-
-        /**
-         * 调用 Gemini API (带指数退避重试)
-         * @param {string} systemPrompt - 系统提示
-         * @param {string} userQuery - 用户查询
-         * @returns {Promise<string>} - AI 生成的文本
-         */
-        async function callGeminiApi(systemPrompt, userQuery) {
-            const apiKey = ""; // Canvas 将在运行时自动提供
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-            };
-
-            // 使用带退避的 fetch
-            const response = await fetchWithBackoff(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (!response.ok) {
-                const errorBody = await response.text();
-                throw new Error(`API response was not ok: ${response.status} ${errorBody}`);
-            }
-
-            const result = await response.json();
             
-            if (result.candidates && result.candidates.length > 0 &&
-                result.candidates[0].content && result.candidates[0].content.parts &&
-                result.candidates[0].content.parts.length > 0) {
-                return result.candidates[0].content.parts[0].text;
-            } else {
-                throw new Error('Invalid response structure from API');
-            }
-        }
-
-        /**
-         * 带指数退避的 Fetch
-         */
-        async function fetchWithBackoff(url, options, retries = 3, delay = 1000) {
-            try {
-                const response = await fetch(url, options);
-                if (!response.ok && response.status === 429 && retries > 0) { // 429 Too Many Requests
-                    // 等待一段时间再重试
-                    await new Promise(res => setTimeout(res, delay));
-                    return fetchWithBackoff(url, options, retries - 1, delay * 2); // 增加延迟
+            let currentPlayer = 'X';
+            let gameState = ["", "", "", "", "", "", "", "", ""];
+            let gameActive = true;
+            
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // 横
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // 竖
+                [0, 4, 8], [2, 4, 6]           // 斜
+            ];
+            
+            function handleCellClick(e) {
+                const clickedCell = e.target;
+                const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
+                
+                // 如果单元格已被点击或游戏已结束，则不执行任何操作
+                if (gameState[clickedCellIndex] !== "" || !gameActive) {
+                    return;
                 }
-                return response;
-            } catch (error) {
-                if (retries > 0) {
-                    // 网络错误等，也进行重试
-                    await new Promise(res => setTimeout(res, delay));
-                    return fetchWithBackoff(url, options, retries - 1, delay * 2);
-                }
-                throw error; // 重试次数用尽，抛出错误
+                
+                // 更新游戏状态
+                gameState[clickedCellIndex] = currentPlayer;
+                clickedCell.innerHTML = currentPlayer;
+                clickedCell.classList.add(currentPlayer.toLowerCase());
+                
+                // 检查是否获胜
+                checkResult();
             }
-        }
+            
+            function checkResult() {
+                let roundWon = false;
+                for (let i = 0; i < winPatterns.length; i++) {
+                    const winCondition = winPatterns[i];
+                    let a = gameState[winCondition[0]];
+                    let b = gameState[winCondition[1]];
+                    let c = gameState[winCondition[2]];
+                    
+                    if (a === '' || b === '' || c === '') {
+                        continue; // 跳过空格子
+                    }
+                    if (a === b && b === c) {
+                        roundWon = true; // 发现胜利
+                        break;
+                    }
+                }
+                
+                if (roundWon) {
+                    gameStatus.innerHTML = `玩家 '${currentPlayer}' 获胜! 🎉`;
+                    gameActive = false;
+                    return;
+                }
+                
+                // 检查是否平局 (所有格子都满了)
+                let roundDraw = !gameState.includes("");
+                if (roundDraw) {
+                    gameStatus.innerHTML = "平局! 🤝";
+                    gameActive = false;
+                    return;
+                }
+                
+                // 切换玩家
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                gameStatus.innerHTML = `轮到 '${currentPlayer}' 了`;
+            }
+            
+            function resetGame() {
+                gameActive = true;
+                currentPlayer = "X";
+                gameState = ["", "", "", "", "", "", "", "", ""];
+                gameStatus.innerHTML = `轮到 '${currentPlayer}' 了`;
+                cells.forEach(cell => {
+                    cell.innerHTML = "";
+                    cell.classList.remove('x'); // 移除 'x' 'o' 样式
+                    cell.classList.remove('o');
+                });
+            }
+            
+            // 添加事件监听器
+            cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+            resetButton.addEventListener('click', resetGame);
+        });
 
     </script>
 
 </body>
-
 </html>
