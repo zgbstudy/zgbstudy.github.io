@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 确保网页在移动设备上也能正常显示 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的职业规划作品集 - [请替换成你的名字]</title>
+    <!-- 引入Tailwind CSS，这是目前最流行的CSS框架之一 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 使用Inter字体，让页面看起来更现代 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 应用Inter字体到整个页面 */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* 简单的平滑滚动效果 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* 跟随鼠标的光球特效 - 优化版 */
+        #mouse-orb {
+            position: fixed;
+            /* z-index为40，低于导航栏(z-50)，高于页面内容 */
+            z-index: 40; 
+            /* 尺寸改小 */
+            width: 250px;
+            height: 250px;
+            /* 初始位置在屏幕外 */
+            top: -500px; 
+            left: -500px;
+            /* 径向渐变 - 亮度提高 */
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none; /* 关键：让鼠标可以“穿透”光球，点击它下面的内容 */
+            transform: translate(-50%, -50%); /* 确保光球中心对准鼠标指针 */
+            /* 跟随速度加快 */
+            transition: top 0.05s ease-out, left 0.05s ease-out; 
+            /* 模糊度降低，让光晕更集中 */
+            filter: blur(30px); 
+        }
+    </style>
+</head>
+<!-- 切换到暗色模式: bg-slate-900 text-slate-200 -->
+<body class="bg-slate-900 text-slate-200">
+
+    <!-- 跟随鼠标的光球 -->
+    <div id="mouse-orb"></div>
+
+    <!-- 1. 导航栏 -->
+    <!-- 导航栏背景和文字颜色适配暗色模式 -->
+    <header class="bg-slate-800 shadow-lg sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- 左上角的名字或Logo - 颜色调亮 -->
+            <div class="text-2xl font-bold text-indigo-400">[你的名字]</div>
+            <!-- 导航链接 - 颜色调亮 -->
+            <div class="space-x-6 hidden md:block">
+                <a href="#about" class="text-slate-300 hover:text-indigo-400 transition duration-300">关于我</a>
+                <a href="#plan" class="text-slate-300 hover:text-indigo-400 transition duration-300">职业规划</a>
+                <a href="#skills" class="text-slate-300 hover:text-indigo-400 transition duration-300">技能栈</a>
+                <a href="#projects" class="text-slate-300 hover:text-indigo-400 transition duration-300">我的项目</a>
+                <a href="#contact" class="text-slate-300 hover:text-indigo-400 transition duration-300">联系我</a>
+            </div>
+            <!-- 移动端菜单按钮 (功能未实现，仅为样式) -->
+            <button class="md:hidden text-slate-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <!-- 2. 主体内容 -->
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- "关于我" (Hero区域) -->
+        <section id="about" class="text-center py-20">
+            <!-- 你可以放一张你的专业照片或头像 -->
+            <img src="https://placehold.co/128x128/E0E7FF/4F46E5?text=头像" alt="你的头像" class="w-32 h-32 rounded-full mx-auto mb-6 border-4 border-slate-700 shadow-lg">
+            
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">你好，我是 [你的名字]</h1>
+            <p class="text-xl md:text-2xl text-indigo-400 font-medium mb-8">
+                目标职业：前端开发工程师
+            </p>
+            <p class="max-w-3xl mx-auto text-lg text-slate-300 leading-relaxed">
+                欢迎来到我的职业规划作品集。我是一名 [你的专业] 研究生，正致力于成为一名优秀的前端开发工程师。
+                我相信技术能创造价值，而我正走在这条创造之路上。
+            </p>
+        </section>
+
+        <!-- "职业规划" -->
+        <!-- 布局调整：移除卡片样式(rounded-lg shadow-xl)，改为通栏背景色块 -->
+        <section id="plan" class="py-20 bg-slate-800">
+            <div class="px-6 md:px-12 container mx-auto">
+                <h2 class="text-3xl font-bold text-center text-white mb-12">我的职业规划</h2>
+                <div class="flex flex-col md:flex-row md:space-x-12">
+                    
+                    <!-- 目标行业 -->
+                    <div class="flex-1 mb-8 md:mb-0">
+                        <h3 class="text-2xl font-semibold text-indigo-500 mb-4">目标行业：信息通讯与互联网</h3>
+                        <p class="text-slate-300 leading-relaxed">
+                            我选择互联网行业，因为它充满了创新、活力与挑战。我希望能在这个行业中，利用前端技术，
+                            为用户打造流畅、美观且实用的产品，解决实际问题。
+                            （这里你可以详细写你对这个行业的理解和向往）
+                        </p>
+                    </div>
+                    
+                    <!-- 规划路径 -->
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-indigo-500 mb-4">我的发展路径</h3>
+                        <ul class="list-disc list-inside space-y-3 text-slate-300">
+                            <li>
+                                <span class="font-semibold">短期 (1-2年):</span> 
+                                熟练掌握 HTML, CSS, JavaScript 核心基础，深入学习 React/Vue 框架，找到一份前端开发实习/工作，积累真实项目经验。
+                            </li>
+                            <li>
+                                <span class="font-semibold">中期 (3-5年):</span> 
+                                成为团队的技术骨干，能够独立负责复杂模块，深入理解前端工程化、性能优化，并开始探索全栈开发。
+                            </li>
+                            <li>
+                                <span class="font-semibold">长期 (5年以上):</span> 
+                                成为资深前端工程师或架构师，引领技术选型，赋能团队，持续关注技术前沿，为公司创造更大的业务价值。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- "技能栈" -->
+        <section id="skills" class="py-20">
+            <h2 class="text-3xl font-bold text-center text-white mb-12">我的技能栈</h2>
+            <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- 技能项1 - 增加 transition-all 和 hover:rotate-3 -->
+                <div class="bg-slate-800 p-6 rounded-lg shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-3">
+                    <img src="https://placehold.co/64x64/E0E7FF/4F46E5?text=HTML5" alt="HTML5" class="h-16 w-16 mx-auto mb-4 rounded-full">
+                    <h4 class="text-xl font-semibold text-white">HTML5</h4>
+                    <p class="text-slate-400 text-sm">（正在学习）</p>
+                </div>
+                <!-- 技能项2 - 增加 transition-all 和 hover:-rotate-3 -->
+                <div class="bg-slate-800 p-6 rounded-lg shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:-rotate-3">
+                    <img src="https://placehold.co/64x64/E0E7FF/4F46E5?text=CSS3" alt="CSS3" class="h-16 w-16 mx-auto mb-4 rounded-full">
+                    <h4 class="text-xl font-semibold text-white">CSS3</h4>
+                    <p class="text-slate-400 text-sm">（正在学习）</p>
+                </div>
+                <!-- 技能项3 - 增加 transition-all 和 hover:rotate-3 -->
+                <div class="bg-slate-800 p-6 rounded-lg shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-3">
+                    <img src="https://placehold.co/64x64/E0E7FF/4F46E5?text=JS" alt="JavaScript" class="h-16 w-16 mx-auto mb-4 rounded-full">
+                    <h4 class="text-xl font-semibold text-white">JavaScript</h4>
+                    <p class="text-slate-400 text-sm">（计划学习）</p>
+                </div>
+                <!-- 技能项4 - 增加 transition-all 和 hover:-rotate-3 -->
+                <div class="bg-slate-800 p-6 rounded-lg shadow-lg text-center transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:-rotate-3">
+                    <img src="https://placehold.co/64x64/E0E7FF/4F46E5?text=React" alt="React" class="h-16 w-16 mx-auto mb-4 rounded-full">
+                    <h4 class="text-xl font-semibold text-white">React</h4>
+                    <p class="text-slate-400 text-sm">（计划学习）</p>
+                </div>
+                <!-- 你可以添加更多技能 -->
+            </div>
+            <p class="text-center text-slate-400 mt-8">
+                （你可以根据你的学习进度，替换这里的技能和状态）
+            </p>
+        </section>
+
+        <!-- "我的项目" -->
+        <!-- 布局调整：移除卡片样式，改为通栏背景色块，调整背景色为 indigo-800 -->
+        <section id="projects" class="py-20 bg-indigo-800 text-white">
+            <div class="px-6 md:px-12 container mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">我的项目</h2>
+                <!-- 内部卡片适配暗色模式 -->
+                <div class="bg-slate-800 text-slate-200 rounded-lg shadow-lg p-8 max-w-3xl mx-auto">
+                    <!-- 项目占位图 -->
+                    <img src="https://placehold.co/600x300/E0E7FF/4F46E5?text=我的第一个网页项目" alt="项目截图" class="w-full h-auto rounded-md mb-6">
+                    <h3 class="text-2xl font-semibold text-indigo-400 mb-3">项目一：个人职业规划作品集（就是本站）</h3>
+                    <p class="text-slate-300 leading-relaxed mb-4">
+                        作为我前端学习之路的起点，我搭建了这个个人作品集网站。
+                        它完全由我手动编写 HTML 和 CSS（借助Tailwind）完成，用于在职业规划大赛中展示我的目标和决心。
+                    </p>
+                    <p class="text-slate-300 leading-relaxed">
+                        <strong>主要技术：</strong> HTML5, Tailwind CSS <br>
+                        <strong>项目收获：</strong> 
+                        （这里写你通过做这个网页学到了什么，比如：我学会了如何搭建网页结构、使用CSS进行布局和美化，以及如何让网页在手机和电脑上都能良好显示。）
+                    </p>
+                    <!-- 你可以放一个GitHub链接 -->
+                    <!-- 
+                    <a href="#" class="inline-block mt-4 bg-indigo-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-indigo-700 transition duration-300">
+                        查看项目代码 (GitHub)
+                    </a>
+                    -->
+                </div>
+                <!-- 
+                <p class="text-center text-indigo-100 mt-12">
+-->
+                <!-- 
+                <p class="text-center text-indigo-100 mt-12">
+                    （未来你会有更多项目填充到这里）
+                </p>
+                -->
+
+                <!-- ✨ GEMINI API 功能区 -->
+                <div class="bg-slate-800 text-slate-200 rounded-lg shadow-lg p-8 max-w-3xl mx-auto mt-12">
+                    <h3 class="text-2xl font-semibold text-indigo-400 mb-3">项目二：✨ AI 驱动的项目点子生成器</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6">
+                        作为一名前端开发者，持续创造是关键。我内置了这个小工具来展示我集成 API 和使用 AI 的能力。
+                        它调用 Gemini API 来帮助构思下一个练习项目。
+                    </p>
+                    
+                    <!-- 输入区 -->
+                    <div class="mb-4">
+                        <label for="topic-input" class="block text-sm font-medium text-slate-300 mb-2">输入一个你感兴趣的主题（例如：音乐、旅行、健身）：</label>
+                        <input type="text" id="topic-input" class="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="例如：音乐">
+                    </div>
+                    
+                    <!-- 按钮 -->
+                    <button id="generate-btn" onclick="handleGenerate()" class="inline-block bg-indigo-600 text-white text-lg font-medium px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 transform hover:-translate-y-0.5 disabled:bg-slate-500 disabled:cursor-not-allowed">
+                        ✨ 生成项目点子
+                    </button>
+                    
+                    <!-- 结果区 -->
+                    <div id="results-container" class="mt-6">
+                        <!-- AI 生成的内容将显示在这里 -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- "联系我" -->
+        <section id="contact" class="py-20 text-center">
+            <h2 class="text-3xl font-bold text-center text-white mb-6">联系我</h2>
+            <p class="max-w-2xl mx-auto text-lg text-slate-300 leading-relaxed mb-8">
+                感谢您的访问。如果您对我的规划感兴趣，或有任何建议，欢迎与我联系。
+            </p>
+            <a href="mailto:[你的邮箱地址]" class="inline-block bg-indigo-600 text-white text-lg font-medium px-8 py-3 rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 transform hover:-translate-y-0.5">
+                发送邮件
+            </a>
+            <!-- 你还可以添加你的GitHub或LinkedIn -->
+            <!-- 
+            <div class="flex justify-center space-x-6 mt-8">
+                <a href="#" class="text-slate-400 hover:text-indigo-400">LinkedIn</a>
+                <a href="#" class="text-slate-400 hover:text-indigo-400">GitHub</a>
+            </div>
+            -->
+        </section>
+
+    </main>
+
+    <!-- 3. 页脚 -->
+    <!-- 页脚颜色调暗，与 body 形成对比 -->
+    <footer class="bg-slate-950 text-slate-400 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 [你的名字]. 为第三届全国大学生职业规划大赛而设计。</p>
+        </div>
+    </footer>
+
+    <!-- 光球特效的JavaScript -->
+    <script>
+        document.addEventListener('mousemove', function(e) {
+            const orb = document.getElementById('mouse-orb');
+            if (orb) {
+                // e.clientX 和 e.clientY 是鼠标相对于浏览器窗口的位置
+                // 这与 'position: fixed' 完美配合
+                orb.style.left = e.clientX + 'px';
+                orb.style.top = e.clientY + 'px';
+            }
+        });
+
+        // --- ✨ Gemini API 功能 ---
+
+        /**
+         * 处理生成按钮点击事件
+         */
+        async function handleGenerate() {
+            const btn = document.getElementById('generate-btn');
+            const input = document.getElementById('topic-input');
+            const resultsContainer = document.getElementById('results-container');
+            
+            const userTopic = input.value.trim();
+            
+            if (!userTopic) {
+                resultsContainer.innerHTML = '<p class="text-red-400">请输入一个主题！</p>';
+                return;
+            }
+
+            // 禁用按钮并显示加载动画
+            btn.disabled = true;
+            resultsContainer.innerHTML = `
+                <div class="flex justify-center items-center py-4">
+                    <div class="w-6 h-6 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+                    <p class="ml-3 text-slate-300">✨ AI 正在思考中，请稍候...</p>
+                </div>
+            `;
+
+            try {
+                // 定义系统提示，指导 AI 的角色和任务
+                const systemPrompt = `
+你是一位资深的前端开发导师。一名初级开发者（目标是成为前端工程师）向你寻求帮助。
+他们想围绕一个特定主题构建一个练习项目，以提高他们的 HTML, CSS, JavaScript 和 React 技能。
+
+你的任务是：
+1.  根据用户提供的主题，生成 3 个独特的项目点子。
+2.  每个点子都必须包含以下内容：
+    * **项目名称**: 一个简洁且有创意的标题。
+    * **项目描述**: 一两句话描述这个项目是做什么的。
+    * **核心功能**: 3-4 个关键功能的点。
+    * **进阶挑战**: 1 个可以锻炼更高级技能的“挑战”功能。
+3.  使用 Markdown 格式化你的回答，使用加粗和列表。
+4.  直接开始回答，不要有额外的寒暄。
+                `;
+
+                // 调用 API
+                const responseText = await callGeminiApi(systemPrompt, `主题：${userTopic}`);
+                
+                // 清理加载动画
+                resultsContainer.innerHTML = '';
+
+                // 创建 <pre> 标签来保留 AI 返回的格式
+                const outputPre = document.createElement('pre');
+                outputPre.textContent = responseText; // 使用 textContent 来安全地插入文本
+                // 添加 Tailwind 类来美化和自动换行
+                outputPre.className = 'bg-slate-900 p-4 rounded-md border border-slate-700 whitespace-pre-wrap font-mono text-sm text-slate-200';
+                
+                resultsContainer.appendChild(outputPre);
+
+            } catch (error) {
+                console.error('Gemini API call failed:', error);
+                resultsContainer.innerHTML = `<p class="text-red-400">抱歉，调用 AI 时出错：${error.message}</p>`;
+            } finally {
+                // 无论成功还是失败，都重新启用按钮
+                btn.disabled = false;
+            }
+        }
+
+        /**
+         * 调用 Gemini API (带指数退避重试)
+         * @param {string} systemPrompt - 系统提示
+         * @param {string} userQuery - 用户查询
+         * @returns {Promise<string>} - AI 生成的文本
+         */
+        async function callGeminiApi(systemPrompt, userQuery) {
+            const apiKey = ""; // Canvas 将在运行时自动提供
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+            };
+
+            // 使用带退避的 fetch
+            const response = await fetchWithBackoff(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorBody = await response.text();
+                throw new Error(`API response was not ok: ${response.status} ${errorBody}`);
+            }
+
+            const result = await response.json();
+            
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error('Invalid response structure from API');
+            }
+        }
+
+        /**
+         * 带指数退避的 Fetch
+         */
+        async function fetchWithBackoff(url, options, retries = 3, delay = 1000) {
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok && response.status === 429 && retries > 0) { // 429 Too Many Requests
+                    // 等待一段时间再重试
+                    await new Promise(res => setTimeout(res, delay));
+                    return fetchWithBackoff(url, options, retries - 1, delay * 2); // 增加延迟
+                }
+                return response;
+            } catch (error) {
+                if (retries > 0) {
+                    // 网络错误等，也进行重试
+                    await new Promise(res => setTimeout(res, delay));
+                    return fetchWithBackoff(url, options, retries - 1, delay * 2);
+                }
+                throw error; // 重试次数用尽，抛出错误
+            }
+        }
+
+    </script>
+
+</body>
+</html>
